@@ -68,8 +68,7 @@ def run_standard_training(reg_layer=None, reg_strength=1e-4, dropout = False):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
     scheduler = lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
-    print(dropout)
-    exit(1)
+    
 
     # execute training
     model = utils.standard_train(model, data_tr, criterion, optimizer,
@@ -198,8 +197,7 @@ if __name__=='__main__':
 
         for reg_layer in args.layers:
             if args.per_layer:
-                print(args.l1)
-                exit(1)
+               
                 if args.l1 is None and args.dropout is None:
                     print("When choosing 'per_layer', you must specify --l1 or --dropout")
                     exit(1)
@@ -213,30 +211,14 @@ if __name__=='__main__':
                 #tag = run_standard_training(reg_layer=reg_layer, dropout=True)  # uses default reg_strength
             print(f"Finished training variant: {tag}")
 
-
-        #for reg_layer in variants:
-        #    #tag = run_standard_training(reg_layer=reg_layer)  # uses default reg_strength
-        #    tag = run_standard_training(reg_layer=reg_layer, dropout=True)  # uses default reg_strength
-        
-        #variants = ["fc3"] #,  f
-        #for reg_layer in variants:
-        #    for reg_strength in [1e-5, 2e-4, 1e-2, 0.1, 1.0,10.0]:
-        #        tag = run_standard_training(reg_layer=reg_layer,reg_strength=reg_strength)  # uses default reg_strength
-
-
-        #run_evaluation()
-        #run_evaluation(dropout=True)
-        run_evaluation(comp_single='fc3_sparse')
+        #run_evaluation(comp_single='fc3_sparse')
         #run_evaluation(comp_single='conv4_sparse')
         print(f"Finished training variant: {tag}")
     elif args.mode == "eval":
-       run_evaluation(comp_single='fc1_sparse')
+       comp_single = args.layers[0] if args.per_layer else None
+       run_evaluation(comp_single=comp_single, dropout = args.dropout)
     else:
-        #plot_sparsification_results("eval_results.txt")
-        #utils.visualize("eval_results_dropout.txt")
+ 
         utils.visualize(args.vis_text)
 
-        #utils.visualize_queries()
-        #utils.visualize_queries_dual("eval_results.txt","eval_results_dropout.txt")
-        #utils.visualize("eval_results_conv4_sparse.txt")
 
